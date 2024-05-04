@@ -15,6 +15,15 @@ Router.get('/users',authentication, async (req, res) => {
     }
 })
 
+Router.get('/friends',authentication, async(req, res) => {
+    const user = await User.findOne({username: req.body.serverData.user.username})
+    if(user){
+        res.json({friends: user.friends})
+    }else{
+        res.status(404).json({message: "User not found"})
+    }
+})
+
 Router.post('/send-friend-request',authentication, async(req,res)=> {
     const {username} = req.body;
     const receiverUser = await User.findOne({username});
