@@ -91,4 +91,21 @@ Router.post('/accept-friend-request', authentication,async (req, res) => {
     }
 })
 
+Router.post('/remove-friend', authentication, async(req, res) => {
+    // Expects a body with username: username
+    const userUsername = req.body.serverData.user.username;
+    const friendUsername = req.body.username;
+    const user = await User.findOne({username: userUsername})
+    if(user){
+        const friend = await User.findOne({username: friendUsername})
+        if(friend){
+            user.friends = user.friends.filter( id => !id.equals(friend._id) )
+            friend.friends = friend.friends.filter( id => !id.equals(user._id))
+            await user.save()
+            await friend.save();
+            res.json({message: 'Friend removed successfully'})
+        }else{ res.status(404).json({message: 'Friend not found'}) }
+    }else{ res.status(404).json({message: 'User not found'}) }
+})
+
 export default Router;
