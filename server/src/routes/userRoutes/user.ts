@@ -18,13 +18,18 @@ Router.get('/users',authentication, async (req, res) => {
 Router.get('/friends',authentication, async(req, res) => {
     const user = await User.findOne({username: req.body.serverData.user.username})
     if(user){
-        res.json({friends: user.friends})
+        const friendsFull = await User.find({_id: {$in: user.friends}})
+        if(friendsFull){
+            const friends = friendsFull.map(user => user.username)
+            res.json({friends});
+        }else{ res.json({message: 'fuck you do not have any friends it seems'})}
     }else{
         res.status(404).json({message: "User not found"})
     }
 })
 
 Router.post('/send-friend-request',authentication, async(req,res)=> {
+    // Expect body.username = username
     const {username} = req.body;
     const receiverUser = await User.findOne({username});
     if(receiverUser){
@@ -68,6 +73,7 @@ Router.get('/sent-friend-requests', authentication, async(req, res) => {
 })
 
 Router.post('/accept-friend-request', authentication,async (req, res) => {
+    // Expects body.username = username
     const user = await User.findOne({username: req.body.serverData.user.username})
     if(user){
         const {username} = req.body;

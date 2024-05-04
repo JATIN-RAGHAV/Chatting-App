@@ -27,7 +27,24 @@ Router.get('/users', authenticate_1.default, (req, res) => __awaiter(void 0, voi
         res.status(404).json({ message: 'Could not find users' });
     }
 }));
+Router.get('/friends', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield schemas_1.User.findOne({ username: req.body.serverData.user.username });
+    if (user) {
+        const friendsFull = yield schemas_1.User.find({ _id: { $in: user.friends } });
+        if (friendsFull) {
+            const friends = friendsFull.map(user => user.username);
+            res.json({ friends });
+        }
+        else {
+            res.json({ message: 'fuck you do not have any friends it seems' });
+        }
+    }
+    else {
+        res.status(404).json({ message: "User not found" });
+    }
+}));
 Router.post('/send-friend-request', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Expect body.username = username
     const { username } = req.body;
     const receiverUser = yield schemas_1.User.findOne({ username });
     if (receiverUser) {
@@ -72,6 +89,7 @@ Router.get('/sent-friend-requests', authenticate_1.default, (req, res) => __awai
     }
 }));
 Router.post('/accept-friend-request', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Expects body.username = username
     const user = yield schemas_1.User.findOne({ username: req.body.serverData.user.username });
     if (user) {
         const { username } = req.body;
@@ -93,6 +111,28 @@ Router.post('/accept-friend-request', authenticate_1.default, (req, res) => __aw
         else {
             res.status(404).json({ message: 'Receiver user not found' });
         }
+    }
+}));
+Router.post('/remove-friend', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Expects a body with username: username
+    const userUsername = req.body.serverData.user.username;
+    const friendUsername = req.body.username;
+    const user = yield schemas_1.User.findOne({ username: userUsername });
+    if (user) {
+        const friend = yield schemas_1.User.findOne({ username: friendUsername });
+        if (friend) {
+            user.friends = user.friends.filter(id => !id.equals(friend._id));
+            friend.friends = friend.friends.filter(id => !id.equals(user._id));
+            yield user.save();
+            yield friend.save();
+            res.json({ message: 'Friend removed successfully' });
+        }
+        else {
+            res.status(404).json({ message: 'Friend not found' });
+        }
+    }
+    else {
+        res.status(404).json({ message: 'User not found' });
     }
 }));
 exports.default = Router;
