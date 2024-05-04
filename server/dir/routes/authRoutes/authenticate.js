@@ -27,7 +27,7 @@ function authentication(req, res, next) {
             if (typeof user === 'object') {
                 const userServer = yield schemas_1.User.findOne({ username: user.username });
                 if (userServer) {
-                    req.body['user'] = user;
+                    req.body.serverData = { user };
                     return next();
                 }
             }

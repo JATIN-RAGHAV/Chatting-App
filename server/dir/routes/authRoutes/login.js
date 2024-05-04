@@ -19,7 +19,7 @@ const config_1 = require("./config");
 const Router = express_1.default.Router();
 Router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
-    const user = yield schemas_1.User.findOne({ username });
+    const user = yield schemas_1.User.findOne({ username, password });
     if (user) {
         const token = jsonwebtoken_1.default.sign({ username }, config_1.SECRETKEY);
         res.json({ message: 'Logged in successfully', token });

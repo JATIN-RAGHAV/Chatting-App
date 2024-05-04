@@ -19,7 +19,7 @@ export default async function authentication(req: Request, res: Response, next: 
         if (typeof user === 'object') {
             const userServer = await User.findOne({ username: user.username });
             if (userServer) {
-                req.body.serverData.user = user;
+                req.body.serverData = {user}
                 return next();
             }
         }
