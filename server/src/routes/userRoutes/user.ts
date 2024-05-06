@@ -1,8 +1,11 @@
 import express  from "express";
 import { User } from "../../db/schemas";
 import authentication  from "../authRoutes/authenticate";
+import chattingRoutes from './chattingRoutes'
 
 const Router = express.Router()
+
+Router.use('/chat', chattingRoutes)
 
 Router.get('/users',authentication, async (req, res) => {
     const users = await User.find({})
