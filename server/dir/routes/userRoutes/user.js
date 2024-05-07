@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const schemas_1 = require("../../db/schemas");
 const authenticate_1 = __importDefault(require("../authRoutes/authenticate"));
+const chattingRoutes_1 = __importDefault(require("./chattingRoutes"));
 const Router = express_1.default.Router();
+Router.use('/chat', chattingRoutes_1.default);
 Router.get('/users', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield schemas_1.User.find({});
     if (users) {

@@ -7,6 +7,8 @@ const Router = express.Router()
 Router.use('/login', loginRouter);
 Router.use('/signin', signinRouter)
 Router.use('/user', userRoutes)
-
+Router.use((req, res) => {
+    res.status(404).json({message: 'Page not found'})
+})
 
 export default Router;

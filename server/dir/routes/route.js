@@ -11,4 +11,7 @@ const Router = express_1.default.Router();
 Router.use('/login', login_1.default);
 Router.use('/signin', signin_1.default);
 Router.use('/user', user_1.default);
+Router.use((req, res) => {
+    res.status(404).json({ message: 'Page not found' });
+});
 exports.default = Router;
