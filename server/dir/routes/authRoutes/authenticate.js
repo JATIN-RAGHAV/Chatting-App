@@ -35,7 +35,7 @@ function authentication(req, res, next) {
         }
         catch (error) {
             console.error('JWT Verification Error:', error);
-            return res.status(401).json({ message: 'Could not authenticate' });
+            return res.status(401).json({ message: 'Could not verify' });
         }
     });
 }

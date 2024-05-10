@@ -26,6 +26,6 @@ export default async function authentication(req: Request, res: Response, next: 
         return res.status(401).json({ message: 'Could not authenticate' });
     } catch (error) {
         console.error('JWT Verification Error:', error);
-        return res.status(401).json({ message: 'Could not authenticate' });
+        return res.status(401).json({ message: 'Could not verify' });
     }
 }

@@ -7,12 +7,16 @@ const Router = express.Router()
 
 Router.use('/chat', chattingRoutes)
 
+Router.get('/me', authentication, async(req, res) => {
+    res.json({username: req.body.serverData.user.username})
+})
+
 Router.get('/users',authentication, async (req, res) => {
     const users = await User.find({})
     if(users){
         const usersToSend = users.map((user) => {return{username:user.username} })
         const filteredUsers = usersToSend.filter(user =>  user.username !== req.body.serverData.user.username)
-        res.json(filteredUsers)
+        res.json({Users:filteredUsers})
     }else{
         res.status(404).json({message: 'Could not find users'})
     }

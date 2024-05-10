@@ -18,12 +18,15 @@ const authenticate_1 = __importDefault(require("../authRoutes/authenticate"));
 const chattingRoutes_1 = __importDefault(require("./chattingRoutes"));
 const Router = express_1.default.Router();
 Router.use('/chat', chattingRoutes_1.default);
+Router.get('/me', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json({ username: req.body.serverData.user.username });
+}));
 Router.get('/users', authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield schemas_1.User.find({});
     if (users) {
         const usersToSend = users.map((user) => { return { username: user.username }; });
         const filteredUsers = usersToSend.filter(user => user.username !== req.body.serverData.user.username);
-        res.json(filteredUsers);
+        res.json({ Users: filteredUsers });
     }
     else {
         res.status(404).json({ message: 'Could not find users' });
