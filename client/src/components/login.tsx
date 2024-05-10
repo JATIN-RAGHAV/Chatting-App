@@ -37,8 +37,7 @@ function Login(){
             .then((response: AxiosResponse<ApiResponse>) => {
                 localStorage.setItem('token',response.data.token)
                 console.log(response.data.message)
-                navigate('/signin')
-
+                navigate('/users')
             })
             .catch(error=>{
                 console.log(error)

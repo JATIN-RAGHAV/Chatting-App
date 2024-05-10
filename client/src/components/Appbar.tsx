@@ -40,7 +40,7 @@ function Appbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     getMe();
-    navigate("/");
+    navigate("/signin");
   };
 
   if (username) {
@@ -48,15 +48,22 @@ function Appbar() {
       <>
         <Card style={{ display: "flex", justifyContent: "space-between" }}>
           <h3 style={{ margin: 10 }}>Kaizoku</h3>
-          <div style={{ display: "flex" }}>
-            <h3 style={{ margin: 10 }}>{username}</h3>
+          <div style={{ display: "flex", justifyContent:"space-evenly", width:'20vw' }}>
+          <Button
+              variant="contained"
+              style={{ height: 35 }}
+              onClick={() => navigate('/users')}
+            >
+              Users
+            </Button>
             <Button
               variant="contained"
-              style={{ height: 35, marginLeft: 10 }}
+              style={{ height: 35 }}
               onClick={handleLogout}
             >
               Log Out
             </Button>
+            <h3 style={{ margin: 10 }}>{username}</h3>
           </div>
         </Card>
       </>

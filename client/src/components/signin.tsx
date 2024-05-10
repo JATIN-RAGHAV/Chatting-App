@@ -39,7 +39,7 @@ function Signin() {
         localStorage.setItem("token", response.data.token);
         console.log(response.data.message);
         console.log(localStorage.getItem("token"));
-        navigate("/");
+        navigate("/users");
       })
       .catch((error) => {
         console.log(error);
