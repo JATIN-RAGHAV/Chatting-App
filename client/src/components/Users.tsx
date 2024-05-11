@@ -2,11 +2,14 @@ import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import { Card } from "@mui/material";
 import { getUsers, UsersResponse, FriendsResponse, sendFriendRequest, getFriends, sendFriendRequestResponse, getSentFriendRequests, sentFriendRequestsReponse, getReceivedFriendRequests, receivedFriendRequests } from "../requests/requests";
+import { GradientCircularProgress } from "./loading";
+import SimpleSnackbar from "./snackbar";
 
 
 
 function Users() {
     const [users, setUsers] = useState<({username: string})[]>([]);
+    const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
         async function getAndSetUsers () {
@@ -21,22 +24,25 @@ function Users() {
     }, []);
 
     const handleSendFriendRequest = async (username: string) => {
+        // @ts-ignore
         const sendFriendRequestResponseHere:sendFriendRequestResponse = await sendFriendRequest(username);
         setUsers(users => users.filter(user => user.username != username))
-        alert(sendFriendRequestResponseHere.message)
+        setOpen(true)
     }
 
-    if (users) {
+    if (users.length>0) {
         return (
-        <>
+        <>  
+            <h1 style={{display:'flex', justifyContent:'center', marginBottom:-25}}>Users</h1>
             <div style={{display:'flex', justifyContent:'center', alignContent:'center'}}>
+                <SimpleSnackbar message={"Friend Request Sent Successfully"} open={open} setOpen={setOpen}></SimpleSnackbar>
                 <div style={{display:'flex', justifyContent:'center',marginTop:50,alignContent:'center', flexDirection:'column' }}>
                     {users.map(user => <DisplayUser key={user.username} username={user.username} handleSendFriendRequest={handleSendFriendRequest}></DisplayUser>)}
                 </div>
             </div>
         </>
         );
-  } else return <>Loading....</>
+  } else return <div style={{display:'flex', justifyContent:'center', alignContent:'center', height:'100vh'}} > <GradientCircularProgress/> </div>
 }
 
 const DisplayUser = (props:{username:string, handleSendFriendRequest:Function}) => {

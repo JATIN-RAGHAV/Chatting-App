@@ -38,6 +38,7 @@ function Signin() {
       .then((response: AxiosResponse<ApiResponse>) => {
         localStorage.setItem("token", response.data.token);
         console.log(response.data.message);
+        console.log('signin')
         console.log(localStorage.getItem("token"));
         navigate("/users");
       })
