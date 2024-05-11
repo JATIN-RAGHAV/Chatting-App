@@ -33,6 +33,9 @@ function Appbar() {
   };
 
   useEffect(() => {
+    if(['/signin','/'].includes(location.pathname)){
+        localStorage.removeItem('token')
+    }
     getMe();
     console.log("location");
   }, [location]);
