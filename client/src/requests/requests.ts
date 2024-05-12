@@ -1,9 +1,6 @@
 import axios,{AxiosResponse} from "axios"
 import { backendUrl } from "../config"
 
-const headers = {headers: {
-    authorization: 'bearer '+ localStorage.getItem('token')
-}}
 
 export interface FriendsResponse {
     friends: string[];
@@ -27,8 +24,9 @@ export interface FriendsResponse {
   
 
 export const getFriends = async (): Promise<FriendsResponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try {
-        const res = await axios.get<any, AxiosResponse<FriendsResponse>>(backendUrl+'/user/friends',headers)
+        const res = await axios.get<any, AxiosResponse<FriendsResponse>>(backendUrl+'/user/friends',{headers})
         return res.data
     }catch(err){
         console.log(err)
@@ -37,8 +35,9 @@ export const getFriends = async (): Promise<FriendsResponse> => {
 }  
 
 export const getUsers = async (): Promise<UsersResponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try {
-        const response = await axios.get<any, AxiosResponse<UsersResponse>>(backendUrl + "/user/users", headers);
+        const response = await axios.get<any, AxiosResponse<UsersResponse>>(backendUrl + "/user/users", {headers});
         return response.data
 
     } catch (err) {
@@ -48,8 +47,9 @@ export const getUsers = async (): Promise<UsersResponse> => {
 };
 
 export const sendFriendRequest = async(username: string) => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try{
-        const response =await axios.post<any, AxiosResponse<sendFriendRequestResponse>>(backendUrl+'/user/send-friend-request',{username},headers)
+        const response =await axios.post<any, AxiosResponse<sendFriendRequestResponse>>(backendUrl+'/user/send-friend-request',{username},{headers})
         return response.data
     }catch(err) {
         console.error(err)
@@ -58,23 +58,23 @@ export const sendFriendRequest = async(username: string) => {
 }
 
 export const getSentFriendRequests = async(): Promise<sentFriendRequestsReponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try{
-        const response =await axios.get<any, AxiosResponse<sentFriendRequestsReponse>>(backendUrl+'/user/sent-friend-requests',headers)
+        const response =await axios.get<any, AxiosResponse<sentFriendRequestsReponse>>(backendUrl+'/user/sent-friend-requests',{headers})
         return response.data
     }catch(err) {
         console.error(err)
-        console.log('from here')
         return {sentFriendRequestsUsername: ['']}
     }
 }
 
 export const getReceivedFriendRequests = async(): Promise<receivedFriendRequests> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try{
-        const response =await axios.get<any, AxiosResponse<receivedFriendRequests>>(backendUrl+'/user/received-friend-requests',headers)
+        const response =await axios.get<any, AxiosResponse<receivedFriendRequests>>(backendUrl+'/user/received-friend-requests',{headers})
         return response.data
     }catch(err) {
         console.error(err)
-        console.log('from here')
         return {receivedFriendRequestsUsername: ['']}
     }
 }

@@ -5,6 +5,7 @@ import { backendUrl } from "../config";
 import { Card } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { GradientCircularProgress } from "./loading";
 
 interface ApiResponse {
   username: string;
@@ -15,6 +16,7 @@ function Appbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState<Boolean>(true)
   const getMe = async () => {
     console.log('from function')
     await axios.get<any, AxiosResponse<ApiResponse>>(backendUrl + "/user/me", {
@@ -25,48 +27,70 @@ function Appbar() {
       .then((response: AxiosResponse<ApiResponse>) => {
         console.log('data'+response.data)
         setUsername(response.data.username);
+        setIsLoading(false)
       })
       .catch((err) => {
         console.log(err);
         setUsername('')
+        setIsLoading(false)
       });
   };
 
   useEffect(() => {
-    if(['/signin','/'].includes(location.pathname)){
-        localStorage.removeItem('token')
+    async function name() {
+        await getMe();
+        console.log('pathname')
+        console.log(location.pathname)
+        if(username && ['/signin','/'].includes(location.pathname)){
+            navigate('/users')
+        }
     }
-    getMe();
-    console.log("location");
+    name();
   }, [location]);
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     localStorage.removeItem("token");
-    getMe();
+    await getMe();
     navigate("/signin");
   };
-
+  if(isLoading){
+    return (
+        <>
+          <Card style={{ display: "flex", justifyContent: "space-between", height:50}}>
+            <h3 style={{ margin: 10 }}>Kaizoku</h3>
+            <GradientCircularProgress/>
+          </Card>
+        </>
+      );
+  }
   if (username) {
     return (
       <>
-        <Card style={{ display: "flex", justifyContent: "space-between" }}>
+        <Card style={{ display: "flex", justifyContent: "space-between" ,height:50}}>
           <h3 style={{ margin: 10 }}>Kaizoku</h3>
-          <div style={{ display: "flex", justifyContent:"space-evenly", width:'20vw' }}>
+          <div style={{ display: "flex", justifyContent:"space-evenly" }}>
           <Button
               variant="contained"
-              style={{ height: 35 }}
+              style={{ height: 35 , margin:10}}
               onClick={() => navigate('/users')}
             >
               Users
             </Button>
             <Button
               variant="contained"
-              style={{ height: 35 }}
+              style={{ height: 35 , margin:10}}
+              onClick={() => navigate('/sent-friend-requests')}
+            >
+              OutGoing Requests
+            </Button>
+            <Button
+              variant="contained"
+              style={{ height: 35 , margin:10}}
               onClick={handleLogout}
             >
               Log Out
             </Button>
-            <h3 style={{ margin: 10 }}>{username}</h3>
+            <h3 style={{ margin: 10,marginTop:15 }}>{username}</h3>
           </div>
         </Card>
       </>
@@ -74,7 +98,7 @@ function Appbar() {
   } else {
     return (
       <>
-        <Card style={{ display: "flex", justifyContent: "space-between" }}>
+        <Card style={{ display: "flex", justifyContent: "space-between" ,height:50}}>
           <h3 style={{ margin: 10 }}>Kaizoku</h3>
           <Button
             variant="contained"

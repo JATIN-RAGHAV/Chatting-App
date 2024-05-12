@@ -13,6 +13,7 @@ function Users() {
     const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
+        setIsLoading(true)
         async function getAndSetUsers () {
             const usersResponse: UsersResponse = await getUsers();
             const friendsResponse: FriendsResponse = await getFriends();
@@ -40,7 +41,7 @@ function Users() {
                 <div style={{display:'flex', justifyContent:'center', alignContent:'center'}}>
                     <SimpleSnackbar message={"Friend Request Sent Successfully"} open={open} setOpen={setOpen}></SimpleSnackbar>
                     <div style={{display:'flex', justifyContent:'center',marginTop:50,alignContent:'center',flexWrap:'wrap' }}>
-                        {users.map(user => <DisplayUser key={user.username} username={user.username} handleSendFriendRequest={handleSendFriendRequest}></DisplayUser>)}
+                        {users.map(user => <DisplayUser key={user.username} username={user.username} handleClick={handleSendFriendRequest} buttonText="Add Friend" button={true}></DisplayUser>)}
                     </div>
                 </div>
             </>
@@ -49,11 +50,17 @@ function Users() {
   } else return <div style={{display:'flex', justifyContent:'center', alignContent:'center', height:'100vh'}} > <div style={{alignContent:'center', justifyContent:'center', marginTop:-200}}><GradientCircularProgress/></div> </div>
 }
 
-const DisplayUser = (props:{username:string, handleSendFriendRequest:Function}) => {
-    return <Card  style={{display:'flex', flexDirection:'column', justifyContent:'space-between',height:200, marginBottom:10}}>
-        <h3 style={{marginLeft:10}}>{props.username}</h3>
-        <Button style={{marginRight:10, margin:10}} onClick={() => props.handleSendFriendRequest(props.username)} variant="contained">Add Friend</Button>
+export const DisplayUser = (props:{username:string, handleClick:Function, buttonText: string, button:boolean}) => {
+    if(props.button){
+    return <Card  style={{display:'flex', flexDirection:'column', justifyContent:'space-between',height:200,width:150, marginBottom:10, margin:10}}>
+        <h3 style={{textAlign:'center', marginTop:10}}>{props.username}</h3>
+        <Button style={{marginRight:10, margin:10}} onClick={() => props.handleClick(props.username)} variant="contained">{props.buttonText}</Button>
     </Card>
+    }else{
+        return <Card  style={{display:'flex', flexDirection:'column', justifyContent:'space-between',height:200,margin:10,width:150, marginBottom:10}}>
+        <h3 style={{marginLeft:10}}>{props.username}</h3>
+    </Card>
+    }
 }
 
 export default Users;

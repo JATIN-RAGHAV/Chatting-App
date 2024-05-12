@@ -2,9 +2,10 @@ import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { backendUrl } from "../config";
 import { useNavigate } from "react-router-dom";
+import SimpleSnackbar from "./snackbar";
 
 interface SigninCardProps {
   onChangeUsername: React.ChangeEventHandler<HTMLInputElement>;
@@ -15,12 +16,17 @@ interface SigninCardProps {
 function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState<string>('');
+  const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   interface ApiResponse {
     message: string;
     token: string;
-    // Add more properties as needed
+  }
+
+  interface ApiError {
+    message:string
   }
 
   const onChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +48,11 @@ function Signin() {
         console.log(localStorage.getItem("token"));
         navigate("/users");
       })
-      .catch((error) => {
+      .catch((error:AxiosError<ApiError>) => {
+        if(error.response?.data.message){
+            setMessage(error.response?.data.message)
+        }else setMessage('Could not signin')
+        setOpen(true)
         console.log(error);
       });
   };
@@ -51,12 +61,13 @@ function Signin() {
     <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "90vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "90vh",
         }}
       >
+        <SimpleSnackbar message={message} open={open} setOpen={setOpen}></SimpleSnackbar>
         <SigninCard
           onChangeUsername={onChangeUsername}
           onChangePassword={onChangePassword}
