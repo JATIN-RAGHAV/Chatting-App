@@ -18,8 +18,24 @@ export interface FriendsResponse {
     sentFriendRequestsUsername:string[]
   }
 
-  export interface receivedFriendRequests{
+  export interface receivedFriendRequestsResponse{
     receivedFriendRequestsUsername:string[]
+  }
+
+  export interface acceptFriendRequestResponse{
+    message:string
+  }
+
+  export interface getChatResponse{
+    chat?:{
+        sender: string 
+        message: string
+    }[],
+    message:string
+  }
+
+  export interface sendChatResponse{
+    message:string
   }
   
 
@@ -68,13 +84,47 @@ export const getSentFriendRequests = async(): Promise<sentFriendRequestsReponse>
     }
 }
 
-export const getReceivedFriendRequests = async(): Promise<receivedFriendRequests> => {
+export const getReceivedFriendRequests = async(): Promise<receivedFriendRequestsResponse> => {
     const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try{
-        const response =await axios.get<any, AxiosResponse<receivedFriendRequests>>(backendUrl+'/user/received-friend-requests',{headers})
+        const response =await axios.get<any, AxiosResponse<receivedFriendRequestsResponse>>(backendUrl+'/user/received-friend-requests',{headers})
         return response.data
     }catch(err) {
         console.error(err)
         return {receivedFriendRequestsUsername: ['']}
     }
 }
+
+export const acceptFriendRequest = async(username:string): Promise<acceptFriendRequestResponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
+    try{
+        const response =await axios.post<any, AxiosResponse<acceptFriendRequestResponse>>(backendUrl+'/user/accept-friend-request',{username},{headers})
+        return response.data
+    }catch(err) {
+        console.error(err)
+        return {message: ''}
+    }
+}
+
+export const getChat = async(receiver:string): Promise<getChatResponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
+    try{
+        const response =await axios.post<any, AxiosResponse<getChatResponse>>(backendUrl+'/user/chat/get',{with:receiver},{headers})
+        return response.data
+    }catch(err) {
+        console.error(err)
+        return {message: ''}
+    }
+}
+
+export const sendChat = async(receiver:string, message:string): Promise<sendChatResponse> => {
+    const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
+    try{
+        const response =await axios.post<any, AxiosResponse<sendChatResponse>>(backendUrl+'/user/chat/send',{receiver, message},{headers})
+        return response.data
+    }catch(err) {
+        console.error(err)
+        return {message: ''}
+    }
+}
+

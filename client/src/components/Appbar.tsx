@@ -16,81 +16,108 @@ function Appbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [isLoading, setIsLoading] = useState<Boolean>(true)
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
   const getMe = async () => {
-    console.log('from function')
-    await axios.get<any, AxiosResponse<ApiResponse>>(backendUrl + "/user/me", {
+    console.log("from function");
+    await axios
+      .get<any, AxiosResponse<ApiResponse>>(backendUrl + "/user/me", {
         headers: {
           authorization: "bearer " + localStorage.getItem("token"),
         },
       })
       .then((response: AxiosResponse<ApiResponse>) => {
-        console.log('data'+response.data)
+        console.log("data" + response.data);
         setUsername(response.data.username);
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        setUsername('')
-        setIsLoading(false)
+        setUsername("");
+        setIsLoading(false);
       });
   };
 
   useEffect(() => {
     async function name() {
-        await getMe();
-        console.log('pathname')
-        console.log(location.pathname)
-        if(username && ['/signin','/'].includes(location.pathname)){
-            navigate('/users')
-        }
+      await getMe();
+      console.log("pathname");
+      console.log(location.pathname);
+      if (username && ["/signin", "/"].includes(location.pathname)) {
+        navigate("/users");
+      }
     }
     name();
   }, [location]);
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     localStorage.removeItem("token");
     await getMe();
     navigate("/signin");
   };
-  if(isLoading){
+  if (isLoading) {
     return (
-        <>
-          <Card style={{ display: "flex", justifyContent: "space-between", height:50}}>
-            <h3 style={{ margin: 10 }}>Kaizoku</h3>
-            <GradientCircularProgress/>
-          </Card>
-        </>
-      );
+      <>
+        <Card
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            height: 50,
+          }}
+        >
+          <h3 style={{ margin: 10 }}>Kaizoku</h3>
+          <GradientCircularProgress />
+        </Card>
+      </>
+    );
   }
   if (username) {
     return (
       <>
-        <Card style={{ display: "flex", justifyContent: "space-between" ,height:50}}>
+        <Card
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            height: 50,
+          }}
+        >
           <h3 style={{ margin: 10 }}>Kaizoku</h3>
-          <div style={{ display: "flex", justifyContent:"space-evenly" }}>
-          <Button
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <Button
               variant="contained"
-              style={{ height: 35 , margin:10}}
-              onClick={() => navigate('/users')}
+              style={{ height: 35, margin: 10 }}
+              onClick={() => navigate("/users")}
             >
               Users
             </Button>
             <Button
               variant="contained"
-              style={{ height: 35 , margin:10}}
-              onClick={() => navigate('/sent-friend-requests')}
+              style={{ height: 35, margin: 10 }}
+              onClick={() => navigate("/friends")}
+            >
+              Friends
+            </Button>
+            <Button
+              variant="contained"
+              style={{ height: 35, margin: 10 }}
+              onClick={() => navigate("/received-friend-requests")}
+            >
+              Incoming Requests
+            </Button>
+            <Button
+              variant="contained"
+              style={{ height: 35, margin: 10 }}
+              onClick={() => navigate("/sent-friend-requests")}
             >
               OutGoing Requests
             </Button>
             <Button
               variant="contained"
-              style={{ height: 35 , margin:10}}
+              style={{ height: 35, margin: 10 }}
               onClick={handleLogout}
             >
               Log Out
             </Button>
-            <h3 style={{ margin: 10,marginTop:15 }}>{username}</h3>
+            <h3 style={{ margin: 10, marginTop: 15 }}>{username}</h3>
           </div>
         </Card>
       </>
@@ -98,7 +125,13 @@ function Appbar() {
   } else {
     return (
       <>
-        <Card style={{ display: "flex", justifyContent: "space-between" ,height:50}}>
+        <Card
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            height: 50,
+          }}
+        >
           <h3 style={{ margin: 10 }}>Kaizoku</h3>
           <Button
             variant="contained"

@@ -43,7 +43,7 @@ Router.post("/send", authenticate_1.default, (req, res) => __awaiter(void 0, voi
                     });
                     yield user.save();
                     yield receiverObject.save();
-                    res.json({ message: 'Message sent successfully' });
+                    res.json({ message: "Message sent successfully" });
                 }
                 else {
                     const chatId = (_a = user.chat.find((chat) => { var _a; return (_a = chat.with) === null || _a === void 0 ? void 0 : _a.equals(receiverObject._id); })) === null || _a === void 0 ? void 0 : _a.chatId;
@@ -54,7 +54,7 @@ Router.post("/send", authenticate_1.default, (req, res) => __awaiter(void 0, voi
                         res.json({ message: "Message sent successfully" });
                     }
                     else
-                        res.status(409).json({ message: 'Could not send message' });
+                        res.status(409).json({ message: "Could not send message" });
                 }
             }
             else
@@ -68,7 +68,7 @@ Router.post("/send", authenticate_1.default, (req, res) => __awaiter(void 0, voi
     else
         res.status(404).json({ message: "User not found" });
 }));
-Router.get("/get", authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+Router.post("/get", authenticate_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     // Expects a body {with: username of other person}
     const otherPerson = req.body.with;
@@ -77,28 +77,32 @@ Router.get("/get", authenticate_1.default, (req, res) => __awaiter(void 0, void 
     });
     if (user) {
         const other = yield schemas_1.User.findOne({ username: otherPerson });
+        console.log('with');
+        console.log(req.body.with);
         if (other) {
             const chatId = (_b = user.chat.find((chat) => { var _a; return (_a = chat.with) === null || _a === void 0 ? void 0 : _a.equals(other._id); })) === null || _b === void 0 ? void 0 : _b.chatId;
             if (chatId) {
                 const chatObject = yield schemas_1.Chat.findById(chatId);
                 if (chatObject) {
-                    const chatToSend = chatObject.chat.map(chat => {
+                    const chatToSend = chatObject.chat.map((chat) => {
                         var _a;
                         return {
-                            sender: ((_a = chat.sender) === null || _a === void 0 ? void 0 : _a.equals(user._id)) ? user.username : other.username,
-                            message: chat.message
+                            sender: ((_a = chat.sender) === null || _a === void 0 ? void 0 : _a.equals(user._id))
+                                ? user.username
+                                : other.username,
+                            message: chat.message,
                         };
                     });
-                    res.json({ chat: chatToSend });
+                    res.json({ chat: chatToSend, message: "Chat Sent Successfully" });
                 }
                 else
                     res.status(404).json({ message: "Chat not found" });
             }
             else
-                res.status(404).json({ message: 'Chat not found, here' });
+                res.status(404).json({ message: "Chat not found, here" });
         }
         else
-            res.status(404).json({ message: 'Other user not found' });
+            res.status(404).json({ message: "Other user not found" });
     }
     else
         res.status(404).json({ message: "User not found" });

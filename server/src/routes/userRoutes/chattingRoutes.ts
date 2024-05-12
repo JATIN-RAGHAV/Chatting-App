@@ -30,9 +30,9 @@ Router.post("/send", authentication, async (req, res) => {
             chatId: newChatObjectContent._id,
             with: user._id,
           });
-          await user.save()
-          await receiverObject.save()
-          res.json({message: 'Message sent successfully'})
+          await user.save();
+          await receiverObject.save();
+          res.json({ message: "Message sent successfully" });
         } else {
           const chatId = user.chat.find((chat) =>
             chat.with?.equals(receiverObject._id)
@@ -42,7 +42,7 @@ Router.post("/send", authentication, async (req, res) => {
             chatObject.chat.push({ sender: user._id, message });
             await chatObject.save();
             res.json({ message: "Message sent successfully" });
-          }else res.status(409).json({message: 'Could not send message'})
+          } else res.status(409).json({ message: "Could not send message" });
         }
       } else
         res
@@ -52,7 +52,7 @@ Router.post("/send", authentication, async (req, res) => {
   } else res.status(404).json({ message: "User not found" });
 });
 
-Router.get("/get", authentication, async (req, res) => {
+Router.post("/get", authentication, async (req, res) => {
   // Expects a body {with: username of other person}
   const otherPerson: String = req.body.with;
   const user = await User.findOne({
@@ -60,21 +60,27 @@ Router.get("/get", authentication, async (req, res) => {
   });
   if (user) {
     const other = await User.findOne({ username: otherPerson });
+    console.log('with')
+    console.log(req.body.with)
     if (other) {
-      const chatId = user.chat.find((chat) => chat.with?.equals(other._id))?.chatId;
+      const chatId = user.chat.find((chat) =>
+        chat.with?.equals(other._id)
+      )?.chatId;
       if (chatId) {
         const chatObject = await Chat.findById(chatId);
         if (chatObject) {
-           const chatToSend = chatObject.chat.map(chat => {
-            return{
-                sender:chat.sender?.equals(user._id)?user.username:other.username,
-                message: chat.message
-            }
-        })
-          res.json({ chat: chatToSend });
+          const chatToSend = chatObject.chat.map((chat) => {
+            return {
+              sender: chat.sender?.equals(user._id)
+                ? user.username
+                : other.username,
+              message: chat.message,
+            };
+          });
+          res.json({ chat: chatToSend, message: "Chat Sent Successfully" });
         } else res.status(404).json({ message: "Chat not found" });
-      }else res.status(404).json({message: 'Chat not found, here'})
-    }else res.status(404).json({message: 'Other user not found'})
+      } else res.status(404).json({ message: "Chat not found, here" });
+    } else res.status(404).json({ message: "Other user not found" });
   } else res.status(404).json({ message: "User not found" });
 });
 
