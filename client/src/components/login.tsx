@@ -5,6 +5,7 @@ import { useState } from 'react';
 import axios,{AxiosResponse} from 'axios';
 import { backendUrl } from '../config';
 import { useNavigate } from 'react-router-dom';
+import SimpleSnackbar from "./snackbar";
 
 interface LoginCardProps {
     onChangeUsername: React.ChangeEventHandler<HTMLInputElement>;
@@ -15,6 +16,8 @@ interface LoginCardProps {
 function Login(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState<string>('');
+    const [open, setOpen] = useState<boolean>(false);
     const navigate = useNavigate()
 
     interface ApiResponse {
@@ -40,12 +43,17 @@ function Login(){
                 navigate('/users')
             })
             .catch(error=>{
-                console.log(error)
+                if(error.response?.data.message){
+                    setMessage(error.response?.data.message)
+                }else setMessage('Could not signin')
+                setOpen(true)
+                console.log(error);
             })
     }
 
     return <>
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height:'90vh' }}>
+        <SimpleSnackbar message={message} open={open} setOpen={setOpen}></SimpleSnackbar>
         <LoginCard onChangeUsername={onChangeUsername} onChangePassword={onChangePassword} onClick={login}/>
     </div>
     </>
