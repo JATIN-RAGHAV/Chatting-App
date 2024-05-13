@@ -11,13 +11,13 @@ const corsOptions = {
     origin: '*', // Allow requests from any origin
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   };
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
     console.log(req.body)
     console.log(req.headers)
     next();
 })
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(Router)
 
