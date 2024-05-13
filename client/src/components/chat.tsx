@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getChat, getChatResponse, sendChat, sendChatResponse } from "../requests/requests";
+import { getChat, getChatResponse, sendChat } from "../requests/requests";
 import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
