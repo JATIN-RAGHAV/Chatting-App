@@ -22,8 +22,6 @@ function authentication(req, res, next) {
             return res.status(409).json({ message: 'Token not sent' });
         }
         const token = authHeader.split(' ')[1];
-        console.log('request header');
-        console.dir(authHeader);
         try {
             const user = jsonwebtoken_1.default.verify(token, config_1.SECRETKEY);
             if (typeof user === 'object') {
