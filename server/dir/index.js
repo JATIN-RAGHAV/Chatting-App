@@ -15,10 +15,6 @@ const corsOptions = {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use((0, cors_1.default)(corsOptions));
-app.use((req, res, next) => {
-    console.log('request made');
-    next();
-});
 app.use(express_1.default.json());
 app.use(route_1.default);
 mongoose_1.default.connect(config_1.mongodbUrl);

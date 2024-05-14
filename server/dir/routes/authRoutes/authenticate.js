@@ -17,25 +17,26 @@ const config_1 = require("./config");
 const schemas_1 = require("../../db/schemas");
 function authentication(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const authHeader = req.headers['authorization'];
-        if (!authHeader || typeof authHeader !== 'string') {
-            return res.status(409).json({ message: 'Token not sent' });
+        const authHeader = req.headers["authorization"];
+        if (!authHeader || typeof authHeader !== "string") {
+            return res.status(409).json({ message: "Token not sent" });
         }
-        const token = authHeader.split(' ')[1];
+        const token = authHeader.split(" ")[1];
         try {
             const user = jsonwebtoken_1.default.verify(token, config_1.SECRETKEY);
-            if (typeof user === 'object') {
+            if (typeof user === "object") {
                 const userServer = yield schemas_1.User.findOne({ username: user.username });
                 if (userServer) {
+                    console.log(user);
                     req.body.serverData = { user };
                     return next();
                 }
             }
-            return res.status(401).json({ message: 'Could not authenticate' });
+            return res.status(401).json({ message: "Could not authenticate" });
         }
         catch (error) {
-            console.error('JWT Verification Error:', error);
-            return res.status(401).json({ message: 'Could not verify' });
+            console.error("JWT Verification Error:", error);
+            return res.status(401).json({ message: "Could not verify" });
         }
     });
 }
