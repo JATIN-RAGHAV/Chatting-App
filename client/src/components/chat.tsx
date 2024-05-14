@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { getChat, getChatResponse, sendChat } from "../requests/requests";
 import { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
+import { Card, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+
 
 function Chat() {
     const [message, setMessage] = useState('')
@@ -11,8 +12,6 @@ function Chat() {
     receiver = receiver?.substring(1);
 
     const asyncFunction = async () => {
-        console.log('receiver')
-        console.log(receiver)
         if(receiver){
             const chatTrial =await getChat(receiver);
             if(chatTrial.chat){
@@ -20,39 +19,58 @@ function Chat() {
             }
         }
     }
-
     useEffect(() => {
-        asyncFunction()
-    },[])
+        // Set up the interval
+        const intervalId = setInterval(asyncFunction, 500);
+    
+        // Immediately call asyncFunction
+        asyncFunction();
+    
+        // Clean up the interval when the component is unmounted
+        return () => clearInterval(intervalId);
+    }, []);
 
     const onChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(event.target.value);
-        console.log(message)
       };    
 
     const handleSendMessage=async()=>{
         if(receiver){
-            const response = await sendChat(receiver, message)
-            console.log(response)
-            asyncFunction()
+            sendChat(receiver, message)
+            if(sender){
+                setChat(prevChat => {
+                        if(prevChat.chat){
+                            return {...chat, chat:[...prevChat.chat,{sender, message}]}
+                        }else{
+                            return{...prevChat,chat:[{sender, message}]}
+                        }
+                })
+            }
+            setMessage('')
         }
     }
 
     const [chat, setChat] = useState<getChatResponse>({message:'not yet'})
     return<>
-    <div style={{margin:50,display:'flex', justifyContent:'center', flexDirection:'column',alignContent:'center'}}>
-        {chat.chat?.map(chatSingle => {
-            return(
-                <div key={chatSingle.message+chatSingle.sender+Math.random() } style={{justifyContent:'end'}}>
-                    <div style={{display:'flex',margin:5, justifyContent:chatSingle.sender == receiver?'start':'end'}}>
-                        {chatSingle.message}
+    <Card >
+        <h2 style={{margin:5}}>{receiver}</h2>
+    </Card>
+    <Card style={{margin:5, height:'80vh'}}>
+        <div style={{margin:50,display:'flex', justifyContent:'center', flexDirection:'column',alignContent:'center'}}>
+            {chat.chat?.map(chatSingle => {
+                return(
+                    <div key={chatSingle.message+chatSingle.sender+Math.random() } style={{justifyContent:'end'}}>
+                        <div style={{display:'flex',margin:5, justifyContent:chatSingle.sender == receiver?'start':'end'}}>
+                            {chatSingle.message}
+                        </div>
                     </div>
-                </div>
-            )
-        })}
-    </div>
+                )
+            })}
+        </div>
+    </Card>
     <div style={{display:'flex', justifyContent:'center', alignContent:'center'}}>
         <TextField
+        value={message}
         label='message'
         id='contained-basic'
         variant="outlined"

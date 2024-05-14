@@ -102,7 +102,7 @@ function Friends() {
               height: "100vh",
             }}
           >
-            <h1>No New Request Received.</h1>{" "}
+            <h1>You Don't have any Friends. Fuck.</h1>{" "}
           </div>
         );
     } else
@@ -115,7 +115,7 @@ function Friends() {
             height: "100vh",
           }}
         >
-          <h1>No New Request Received.</h1>{" "}
+          <h1>You Don't have any Friends. Fuck.</h1>{" "}
         </div>
       );
   } else
