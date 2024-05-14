@@ -14,8 +14,6 @@ export default async function authentication(req: Request, res: Response, next: 
         return res.status(409).json({ message: 'Token not sent' });
     }
     const token = authHeader.split(' ')[1];
-    console.log('request header')
-    console.dir(authHeader)
     try {
         const user = jwt.verify(token, SECRETKEY);
         if (typeof user === 'object') {

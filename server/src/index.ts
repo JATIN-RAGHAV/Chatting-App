@@ -14,8 +14,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-    console.log(req.body)
-    console.log(req.headers)
+    console.log('request made')
     next();
 })
 app.use(express.json());
