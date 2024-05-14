@@ -3,6 +3,7 @@ import { getChat, getChatResponse, sendChat } from "../requests/requests";
 import { useEffect, useState } from "react";
 import { Card, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import ScrollPlayground from "./scrollElement";
 
 
 function Chat() {
@@ -57,6 +58,7 @@ function Chat() {
     </Card>
     <Card style={{margin:5, height:'80vh'}}>
         <div style={{margin:50,display:'flex', justifyContent:'center', flexDirection:'column',alignContent:'center'}}>
+            <ScrollPlayground></ScrollPlayground>
             {chat.chat?.map(chatSingle => {
                 return(
                     <div key={chatSingle.message+chatSingle.sender+Math.random() } style={{justifyContent:'end'}}>
