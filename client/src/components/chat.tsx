@@ -3,7 +3,7 @@ import { getChat, getChatResponse, sendChat } from "../requests/requests";
 import { useEffect, useState } from "react";
 import { Card, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import ScrollPlayground from "./scrollElement";
+import './../App.css'
 
 
 function Chat() {
@@ -54,15 +54,14 @@ function Chat() {
     const [chat, setChat] = useState<getChatResponse>({message:'not yet'})
     return<>
     <Card >
-        <h2 style={{margin:5}}>{receiver}</h2>
+        <h2 style={{border:'black'}}>{receiver}</h2>
     </Card>
-    <Card style={{margin:5, height:'80vh'}}>
-        <div style={{margin:50,display:'flex', justifyContent:'center', flexDirection:'column',alignContent:'center'}}>
-            <ScrollPlayground></ScrollPlayground>
+    <Card style={{margin:5, height:'75vh'}}>
+        <div className="scrollable-container" style={{margin:50,display:'flex', justifyContent:'center', flexDirection:'column',alignContent:'center'}}>
             {chat.chat?.map(chatSingle => {
                 return(
                     <div key={chatSingle.message+chatSingle.sender+Math.random() } style={{justifyContent:'end'}}>
-                        <div style={{display:'flex',margin:5, justifyContent:chatSingle.sender == receiver?'start':'end'}}>
+                        <div className="scrollable-content" style={{display:'flex',margin:5, justifyContent:chatSingle.sender == receiver?'start':'end'}}>
                             {chatSingle.message}
                         </div>
                     </div>

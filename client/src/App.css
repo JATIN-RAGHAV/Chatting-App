@@ -1,0 +1,10 @@
+.scrollable-container {
+    height: 75vh; /* Adjust the height as per your requirement */
+    overflow-y: auto;
+    border: 1px solid #ccc; /* Optional: Add border for visual clarity */
+  }
+  
+  .scrollable-content {
+    padding: 1px; /* Optional: Add padding for better readability */
+  }
+  
