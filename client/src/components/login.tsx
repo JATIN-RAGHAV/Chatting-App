@@ -36,7 +36,7 @@ function Login(){
 
     const login = () => {
         const data = {username, password}
-        axios.post<any, AxiosResponse<ApiResponse>>(backendUrl+'/login', data)
+        axios.post<any, AxiosResponse<ApiResponse>>(backendUrl+'/login', data,{headers: {'Content-Type': 'application/json'}})
             .then((response: AxiosResponse<ApiResponse>) => {
                 localStorage.setItem('token',response.data.token)
                 console.log(response.data.message)
@@ -45,7 +45,7 @@ function Login(){
             .catch(error=>{
                 if(error.response?.data.message){
                     setMessage(error.response?.data.message)
-                }else setMessage('Could not login')
+                }else setMessage('Could not shit')
                 setOpen(true)
                 console.log(error);
             })

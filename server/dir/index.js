@@ -14,7 +14,7 @@ const corsOptions = {
     origin: 'https://jatin-raghav.vercel.app/', // Allow only this origin
     optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 };
-app.use((0, cors_1.default)(corsOptions));
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(route_1.default);
 mongoose_1.default.connect(config_1.mongodbUrl)
