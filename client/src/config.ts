@@ -1,1 +1,1 @@
-export const backendUrl ="http://ec2-54-242-37-1.compute-1.amazonaws.com:3000";
+export const backendUrl ="https://ec2-54-242-37-1.compute-1.amazonaws.com:3000";
