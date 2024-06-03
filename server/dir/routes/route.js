@@ -12,6 +12,6 @@ Router.use('/login', login_1.default);
 Router.use('/signin', signin_1.default);
 Router.use('/user', user_1.default);
 Router.use((req, res) => {
-    res.status(404).json({ message: 'Page not found' });
+    res.status(404).json({ message: 'Page not found, here' });
 });
 exports.default = Router;
