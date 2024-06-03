@@ -45,7 +45,7 @@ function Login(){
             .catch(error=>{
                 if(error.response?.data.message){
                     setMessage(error.response?.data.message)
-                }else setMessage('Could not shit')
+                }else setMessage('Could not login, shit')
                 setOpen(true)
                 console.log(error);
             })
