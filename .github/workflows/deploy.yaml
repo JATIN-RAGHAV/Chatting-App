@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main # or the branch you want to deploy from
+      - main 
 
 jobs:
   deploy:
@@ -19,7 +19,6 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > keyfile
         chmod 600 keyfile
+        mkdir -p ~/.ssh
+        cp known_hosts ~/.ssh/known_hosts
         ssh -t -i "my-secret-key-jatin-raghav.pem" ubuntu@ec2-54-242-37-1.compute-1.amazonaws.com  "sudo bash ~/deploy.sh"
-
-
-
