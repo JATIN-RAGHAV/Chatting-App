@@ -8,7 +8,7 @@ Router.use('/login', loginRouter);
 Router.use('/signin', signinRouter)
 Router.use('/user', userRoutes)
 Router.use((req, res) => {
-    res.status(404).json({message: 'Page not found'})
+    res.status(404).json({message: 'Page not found, here'})
 })
 
 export default Router;

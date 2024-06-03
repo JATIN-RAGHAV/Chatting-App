@@ -1,11 +1,13 @@
 import Button from "@mui/material/Button";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
 import { backendUrl } from "../config";
 import { Card } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { GradientCircularProgress } from "./loading";
+import { userState } from "../store/atoms/Appbar";
+import { useRecoilState,  } from "recoil";
 
 interface ApiResponse {
   username: string;
@@ -15,8 +17,7 @@ interface ApiResponse {
 function Appbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const [user, setUser] = useRecoilState(userState)
   const getMe = async () => {
     console.log("from function");
     await axios
@@ -27,13 +28,17 @@ function Appbar() {
       })
       .then((response: AxiosResponse<ApiResponse>) => {
         console.log("data" + response.data);
-        setUsername(response.data.username);
-        setIsLoading(false);
+        setUser({
+          username:response.data.username,
+          isLoading:false
+        });
       })
       .catch((err) => {
         console.log(err);
-        setUsername("");
-        setIsLoading(false);
+        setUser({
+          username:'',
+          isLoading:false
+        });
       });
   };
 
@@ -42,7 +47,7 @@ function Appbar() {
       await getMe();
       console.log("pathname");
       console.log(location.pathname);
-      if (username && ["/signin", "/"].includes(location.pathname)) {
+      if (user.username && ["/signin", "/"].includes(location.pathname)) {
         navigate("/users");
       }
     }
@@ -54,7 +59,7 @@ function Appbar() {
     await getMe();
     navigate("/signin");
   };
-  if (isLoading) {
+  if (user.isLoading) {
     return (
       <>
         <Card
@@ -70,7 +75,7 @@ function Appbar() {
       </>
     );
   }
-  if (username) {
+  if (user.username) {
     return (
       <>
         <Card
@@ -117,7 +122,7 @@ function Appbar() {
             >
               Log Out
             </Button>
-            <h3 style={{ margin: 10, marginTop: 15 }}>{username}</h3>
+            <h3 style={{ margin: 10, marginTop: 15 }}>{user.username}</h3>
           </div>
         </Card>
       </>

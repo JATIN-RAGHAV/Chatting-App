@@ -7,23 +7,26 @@ import sentFriendRequests from './components/sentfriendRequests';
 import receivedFriendRequests from './components/receivedFriendRequests';
 import Friends from './components/friends';
 import Chat from './components/chat';
+import { RecoilRoot } from 'recoil';
 
 function App() {
 
   return (
     <>
-      <Router>
-        <Appbar/>
-        <Routes>
-          <Route path='/' Component={Login}/>
-          <Route path='signin' Component={Signin} />
-          <Route path='/users' Component={Users}/>
-          <Route path='/sent-friend-requests' Component={sentFriendRequests}/>
-          <Route path='/received-friend-requests' Component={receivedFriendRequests}/>
-          <Route path='/friends' Component={Friends}/>
-          <Route path='/chat/:sender/:receiver' Component={Chat}/>
-        </Routes>
-      </Router>
+      <RecoilRoot>
+        <Router>
+          <Appbar/>
+            <Routes>
+              <Route path='/' Component={Login}/>
+              <Route path='signin' Component={Signin} />
+              <Route path='/users' Component={Users}/>
+              <Route path='/sent-friend-requests' Component={sentFriendRequests}/>
+              <Route path='/received-friend-requests' Component={receivedFriendRequests}/>
+              <Route path='/friends' Component={Friends}/>
+              <Route path='/chat/:sender/:receiver' Component={Chat}/>
+            </Routes>
+        </Router>
+      </RecoilRoot>
     </>
   )
 }
