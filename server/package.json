@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
@@ -10,7 +11,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd ../client && npm run build && rm -rf ../server/public && mkdir -p ../server/public && mv ./dist/* ../server/public && cd ../server && tsc && node dir/index.js"
   },
   "keywords": [],
   "author": "",

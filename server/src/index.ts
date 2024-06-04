@@ -1,20 +1,31 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import Router from './routes/route';
 import { mongodbUrl, PORT } from './config';
+import path from 'path';
 
 const app = express();
 
-// Configure CORS
-const corsOptions = {
-  origin: 'https://jatin-raghav.vercel.app/', // Allow only this origin
-  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
-};
-
-app.use(cors());
 app.use(express.json());
+
+// Middleware to set the MIME type for JavaScript files
+app.use((req, res, next) => {
+  if (req.path.endsWith('.js')) {
+    res.type('application/javascript');
+  }
+  next();
+});
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, '/../public')));
+
+// Use the defined routes
 app.use(Router);
+
+// Route to serve the index.html file for all other routes
+app.use("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, '/../public/index.html'));
+});
 
 mongoose.connect(mongodbUrl)
   .then(() => console.log('Connected to MongoDB'))
