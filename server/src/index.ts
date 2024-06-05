@@ -9,8 +9,14 @@ const app = express();
 
 app.use(express.json());
 
+// Apply CORS middleware
 app.use(cors({
-  origin: 'http://ec2-54-242-37-1.compute-1.amazonaws.com'}))
+  origin: 'http://ec2-54-242-37-1.compute-1.amazonaws.com',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware to set the MIME type for JavaScript files
 app.use((req, res, next) => {
