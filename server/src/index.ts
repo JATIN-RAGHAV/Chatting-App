@@ -12,10 +12,11 @@ app.use(express.json());
 // Apply CORS middleware
 app.use(cors({
   origin: 'http://ec2-54-242-37-1.compute-1.amazonaws.com',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If your requests include cookies or other credentials
 }));
 
 // Middleware to set the MIME type for JavaScript files
