@@ -54,8 +54,11 @@ export const getUsers = async (): Promise<UsersResponse> => {
     const headers = {authorization:`bearer ${localStorage.getItem('token')}`}
     try {
         const response = await axios.get<any, AxiosResponse<UsersResponse>>(backendUrl + "/user/users", {headers});
+        console.log('url');
+        console.log(backendUrl + "/user/users");
+        console.log('response')
+        console.log(response.data);
         return response.data
-
     } catch (err) {
         console.log(err);
         return {Users:[]}
