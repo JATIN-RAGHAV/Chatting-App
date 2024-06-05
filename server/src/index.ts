@@ -3,10 +3,14 @@ import mongoose from 'mongoose';
 import Router from './routes/route';
 import { mongodbUrl, PORT } from './config';
 import path from 'path';
+import cors from 'cors'
 
 const app = express();
 
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://ec2-54-242-37-1.compute-1.amazonaws.com'}))
 
 // Middleware to set the MIME type for JavaScript files
 app.use((req, res, next) => {

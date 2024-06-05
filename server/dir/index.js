@@ -8,8 +8,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const route_1 = __importDefault(require("./routes/route"));
 const config_1 = require("./config");
 const path_1 = __importDefault(require("path"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)({
+    origin: 'http://ec2-54-242-37-1.compute-1.amazonaws.com'
+}));
 // Middleware to set the MIME type for JavaScript files
 app.use((req, res, next) => {
     if (req.path.endsWith('.js')) {
