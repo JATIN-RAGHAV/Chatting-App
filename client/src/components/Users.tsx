@@ -19,9 +19,11 @@ function Users() {
             const friendsResponse: FriendsResponse = await getFriends();
             const sentFriendRequestResponse: sentFriendRequestsReponse = await getSentFriendRequests();
             const receivedFriendRequestsResponse: receivedFriendRequestsResponse = await getReceivedFriendRequests();
-            usersResponse.Users = usersResponse.Users.filter(user => !friendsResponse.friends.includes(user.username) && !sentFriendRequestResponse.sentFriendRequestsUsername.includes(user.username) && !receivedFriendRequestsResponse.receivedFriendRequestsUsername.includes(user.username))
-            setUsers(usersResponse.Users)
-            setIsLoading(false)
+            if(usersResponse.Users){
+                usersResponse.Users = usersResponse.Users.filter(user => !friendsResponse.friends.includes(user.username) && !sentFriendRequestResponse.sentFriendRequestsUsername.includes(user.username) && !receivedFriendRequestsResponse.receivedFriendRequestsUsername.includes(user.username))
+                setUsers(usersResponse.Users)
+                setIsLoading(false)
+            }else{ console.dir(usersResponse) }
         }
         getAndSetUsers(); 
     }, []);
