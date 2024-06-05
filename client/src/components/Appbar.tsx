@@ -69,7 +69,7 @@ function Appbar() {
             height: 50,
           }}
         >
-          <h3 style={{ margin: 10 }}>Kaizoku</h3>
+          <h3 style={{ margin: 10 }}><Button onClick={() => navigate('/')}>Kaizoku</Button></h3>
           <GradientCircularProgress />
         </Card>
       </>
@@ -85,7 +85,7 @@ function Appbar() {
             height: 50,
           }}
         >
-          <h3 style={{ margin: 10 }}>Kaizoku</h3>
+          <h3 style={{ margin: 10 }}><Button onClick={() => navigate('/')}>Kaizoku</Button></h3>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>
             <Button
               variant="contained"
@@ -137,7 +137,7 @@ function Appbar() {
             height: 50,
           }}
         >
-          <h3 style={{ margin: 10 }}>Kaizoku</h3>
+          <h3 style={{ margin: 10 }}><Button onClick={() => navigate('/')}>Kaizoku</Button></h3>
           <Button
             variant="contained"
             style={{ height: 35, marginLeft: 10 }}
